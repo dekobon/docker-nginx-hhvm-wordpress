@@ -1,5 +1,5 @@
 # dekobon/docker-nginx-hhvm-wordpress:latest
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:0.9.17
 MAINTAINER Elijah Zupancic <elijah@zupancic.name>
 
 # We group all of the apt commands together here so that our image size doesn't bloat.
@@ -24,14 +24,6 @@ RUN add-apt-repository ppa:rtcamp/nginx && \
 # Wordpress CLI
 ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
 RUN chmod +x /usr/local/bin/wp
-
-# Syslog setup
-RUN sed -i '/source s_src {/,/};/d' /etc/syslog-ng/syslog-ng.conf && \
-    sed -i '/destination d_console { usertty("root"); };/d' /etc/syslog-ng/syslog-ng.conf && \
-    sed -i 's/destination(d_console_all);//' /etc/syslog-ng/syslog-ng.conf && \
-    sed -i '/log { source(s_src); filter(f_crit); destination(d_console); };/d' /etc/syslog-ng/syslog-ng.conf && \
-    sed -i '/@include "`scl-root`\/system\/tty10.conf"/d' /etc/syslog-ng/syslog-ng.conf && \
-    sed -i '/destination d_console_all { file(`tty10`); };/d' /etc/syslog-ng/syslog-ng.conf
 
 COPY etc/syslog-ng/conf.d/sources.conf /etc/syslog-ng/conf.d/sources.conf
 
