@@ -25,6 +25,9 @@ RUN add-apt-repository ppa:rtcamp/nginx && \
 ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
 RUN chmod +x /usr/local/bin/wp
 
+# Syslog setup
+RUN sed -i '/source s_src {/,/};/d' /etc/syslog-ng/syslog-ng.conf
+
 COPY etc/syslog-ng/conf.d/sources.conf /etc/syslog-ng/conf.d/sources.conf
 
 # nginx config
